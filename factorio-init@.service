@@ -1,0 +1,6 @@
+[Unit]
+Description=initialize factorio instance %i
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/factorio/init.sh %i

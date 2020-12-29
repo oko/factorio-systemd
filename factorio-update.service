@@ -1,0 +1,6 @@
+[Unit]
+Description=Factorio server binary auto-update
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/factorio/update.sh

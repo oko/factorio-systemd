@@ -1,0 +1,21 @@
+[Unit]
+Description=factorio server for %I
+Requires=factorio-init@%i.service
+After=factorio-init@%i.service
+
+[Service]
+Type=simple
+ProtectSystem=strict
+ProtectHome=yes
+ExecStart=/usr/local/factorio/versions/latest/bin/x64/factorio \
+  --config /etc/factorio/%i/config.ini \
+  --server-settings /etc/factorio/%i/server-settings.json \
+  --map-settings /etc/factorio/%i/map-settings.json \
+  --start-server game.zip
+WorkingDirectory=/var/lib/factorio/%i
+ReadWritePaths=/var/lib/factorio/%i
+User=factorio
+CapabilityBoundingSet=
+
+[Install]
+WantedBy=multi-user.target

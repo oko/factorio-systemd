@@ -1,0 +1,21 @@
+#!/bin/bash
+set -euo pipefail
+instance="$1"
+
+if [[ "${DEBUG:-no}" == yes ]]; then set -x; fi
+if [[ "$USER" != root ]]; then
+	echo >&2 "ERROR: must run factorio-init as root"
+	exit 1
+fi
+
+/usr/local/factorio/init.sh "$instance"
+rm "/var/lib/factorio/$instance/game.zip"
+
+cdir="/etc/factorio/$instance"
+set +x
+echo >&2 "Next steps:"
+echo >&2 "  1. Edit $cdir/config.ini to tweak server network config"
+echo >&2 "  2. Edit $cdir/server-settings.json to tweak server game config"
+echo >&2 "  3. Edit $cdir/map-gen-settings.json to tweak server mapgen config"
+echo >&2 "  4. Enable server with 'systemctl start factorio@$instance'"
+echo >&2 "  5. Start server with 'systemctl start factorio@$instance'"

@@ -1,0 +1,25 @@
+#!/bin/bash
+set -euo pipefail
+instance="$1"
+
+if [[ "${DEBUG:-no}" == yes ]]; then set -x; fi
+if [[ "$USER" != root ]]; then
+	echo >&2 "ERROR: must run $0 as root"
+	exit 1
+fi
+
+if [[ -z "$instance" ]]; then
+	echo >&2 "ERROR: instance name must not be empty"
+	exit 1
+fi
+
+idir="/var/lib/factorio/$instance"
+cdir="/etc/factorio/$instance"
+if [[ -d "$idir" ]]; then
+	echo >&2 "removed instance data dir $idir"
+	rm -rf "$idir"
+fi
+if [[ -d "$cdir" ]]; then
+	echo >&2 "removed config dir $cdir"
+	rm -rf "$cdir"
+fi
