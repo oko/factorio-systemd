@@ -6,20 +6,31 @@
 #
 # TODO: support downloads of specific versions
 #
-fullurl="$(curl -I https://factorio.com/get-download/latest/headless/linux64 | grep -oP '^location: \K.*')"
+fullurl="$(curl -I https://factorio.com/get-download/latest/headless/linux64 | grep -oP '^location: \K.*' | python -c 'import sys; print(sys.stdin.read().strip())')"
+echo >&2 "full url: $fullurl"
 file="$(basename "${fullurl%%\?*}")"
 _suffix="${file##factorio_headless_x64_}"
 version="${_suffix%%.tar.xz}"
 
 echo >&2 "Factorio latest version: $version"
+echo >&2 "Download URL: '$fullurl'"
+
+[[ -n "$version" ]] || exit 1
 
 outdir="/usr/local/factorio/versions/$version"
 if [[ ! -d "$outdir" ]]; then
     mkdir -p "$outdir"
     pushd "$outdir" || exit 1
-    curl -L  "$fullurl" | tar --strip 1 -xJvf -
+    if ! curl -L  "$fullurl" | tar --strip 1 -xJvf -; then
+			echo >&2 "version $version failed"
+			rm -rf "$outdir"
+		fi
     echo >&2 "version $version installed to $outdir"
     popd || exit 1
 fi
 
-ln -sf "$outdir" /usr/local/factorio/versions/latest
+oldver="$(readlink /usr/local/factorio/versions/latest)"
+if [[ "$oldver" != "$version" ]]; then
+	ln -sfT "$outdir" /usr/local/factorio/versions/latest
+	systemctl restart 'factorio@*.service'
+fi

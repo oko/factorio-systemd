@@ -1,5 +1,6 @@
 install:
 	install -m 644 factorio*.service /etc/systemd/system/
+	install -m 644 factorio*.timer /etc/systemd/system/
 	install -d /usr/local/factorio
 	install -m 755 init.sh update.sh /usr/local/factorio/
 	ln -sf /usr/local/factorio/update.sh /usr/local/bin/factorio-update

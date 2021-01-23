@@ -25,6 +25,8 @@ This repository contains files needed to set up multi-instance Factorio servers 
       4. Enable server with 'systemctl start factorio@test2'
       5. Start server with 'systemctl start factorio@test2'
     ```
+4. Tweak configuration and enable/start the server as explained by `factorio-init`
+5. If you need to reset the game, use `factorio-reset` (which stops the server, removes the game file, and restarts the server to let `factorio-init@$instance.service` recreate it)
 
 ## How Factorio Runs
 
