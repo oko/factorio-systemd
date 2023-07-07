@@ -3,4 +3,5 @@ Description=initialize factorio instance %i
 
 [Service]
 Type=oneshot
+EnvironmentFile=-/etc/factorio/%i/env
 ExecStart=/usr/local/factorio/init.sh %i

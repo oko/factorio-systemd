@@ -7,7 +7,9 @@ After=factorio-init@%i.service
 Type=simple
 ProtectSystem=strict
 ProtectHome=yes
-ExecStart=/usr/local/factorio/versions/latest/bin/x64/factorio \
+Environment=FACTORIO_VERSION=latest
+EnvironmentFile=-/etc/factorio/%i/env
+ExecStart=/usr/local/factorio/versions/1.1.80/bin/x64/factorio \
   --config /etc/factorio/%i/config.ini \
   --server-settings /etc/factorio/%i/server-settings.json \
   --map-settings /etc/factorio/%i/map-settings.json \

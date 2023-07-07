@@ -4,7 +4,7 @@ instance="$1"
 version="${FACTORIO_VERSION:-latest}"
 
 if ! id -un factorio; then
-	useradd -r factorio
+  useradd -r factorio
 fi
 
 idir="/var/lib/factorio/$instance"
@@ -37,6 +37,11 @@ config="$cdir/config.ini"
 if [[ ! -f "$config" ]]; then
   cp "$vdir/config/config.ini" "$config"
   sed -i 's/write-data=.*/write-data=data/' "$config"
+fi
+
+admins="$cdir/server-adminlist.json"
+if [[ -f "$admins" ]]; then
+  cp "$admins" "$idir/data/server-adminlist.json"
 fi
 
 pushd "$idir"

@@ -6,7 +6,13 @@
 #
 # TODO: support downloads of specific versions
 #
-fullurl="$(curl -I https://factorio.com/get-download/latest/headless/linux64 | grep -oP '^location: \K.*' | python -c 'import sys; print(sys.stdin.read().strip())')"
+version="${1:-""}"
+if [[ -z "$version" ]]; then
+	url="https://factorio.com/get-download/latest/headless/linux64"
+else
+	url="https://www.factorio.com/get-download/$version/headless/linux64"
+fi
+fullurl="$(curl -I "$url" | grep -oP '^location: \K.*' | python -c 'import sys; print(sys.stdin.read().strip())')"
 echo >&2 "full url: $fullurl"
 file="$(basename "${fullurl%%\?*}")"
 _suffix="${file##factorio_headless_x64_}"
@@ -29,7 +35,7 @@ if [[ ! -d "$outdir" ]]; then
     popd || exit 1
 fi
 
-oldver="$(readlink /usr/local/factorio/versions/latest)"
+oldver="$(basename $(readlink /usr/local/factorio/versions/latest))"
 if [[ "$oldver" != "$version" ]]; then
 	ln -sfT "$outdir" /usr/local/factorio/versions/latest
 	systemctl restart 'factorio@*.service'
